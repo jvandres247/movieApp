@@ -1,17 +1,33 @@
 import React from 'react';
-import {StyleSheet, Text, SafeAreaView} from 'react-native';
-import {Provider as PaperProvider, Button} from 'react-native-paper';
+import {StyleSheet, StatusBar} from 'react-native';
+import {
+  Provider as PaperProvider,
+  Button,
+  DarkTheme as DarkThemePaper,
+  DefaultTheme as DefaultThemePaper,
+} from 'react-native-paper';
+import {
+  NavigationContainer,
+  DarkTheme as DarkThemeNavigation,
+  DefaultTheme as DefaultThemeNavigation,
+} from '@react-navigation/native';
+import Navigation from './src/navigation/Navigation';
 
 export default function App() {
-  console.log('AQUI');
+
+  DefaultThemePaper.colors.primary = "#1ae1f2";
+  DarkThemePaper.colors.primary = "#1ae1f2";
+  DarkThemePaper.colors.accent = "#1ae1f2";
+
+  DarkThemeNavigation.colors.background = '#192734';
+  DarkThemeNavigation.colors.card = '#15212b';
+
   return (
-    <PaperProvider>
-      <SafeAreaView>
-        <Text>Hola Mundo</Text>
-        <Button icon="image" mode="contained" onPress={() => console.log('Pressed')}>
-    Press me
-  </Button>
-      </SafeAreaView>
+    <PaperProvider theme={DarkThemePaper}>
+    <StatusBar barStyle={"light-content"}/>
+      <NavigationContainer theme={DarkThemeNavigation}>
+        <Navigation />
+      </NavigationContainer>
     </PaperProvider>
   );
 }
