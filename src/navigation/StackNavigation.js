@@ -13,7 +13,6 @@ const Stack = createStackNavigator();
 export default function StackNavigation(props) {
   const {navigation} = props;
   const buttonLeft = (screen) => {
-    console.log(screen);
     switch (screen) {
       case 'search':
       case 'movie':
@@ -52,6 +51,7 @@ export default function StackNavigation(props) {
           title: '',
           headerLeft: () => buttonLeft('movie'),
           headerRight: () => buttonRight(),
+          headerTransparent: true,
         }}
       />
       <Stack.Screen
