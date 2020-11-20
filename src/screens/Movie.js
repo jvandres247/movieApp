@@ -5,6 +5,11 @@ import {BASE_PATH_IMG} from '../utils/constants';
 import ModalVideo from '../components/ModalVideo';
 import {Text, Title, IconButton} from 'react-native-paper';
 import {map} from 'lodash';
+import {Rating} from 'react-native-ratings';
+import usePreferences from '../hooks/usePreferences';
+import startDark from '../assets/png/starDark.png';
+import startLight from '../assets/png/starLight.png';
+
 export default function Movie(props) {
   const {route} = props;
   const {id} = route.params;
@@ -19,10 +24,20 @@ export default function Movie(props) {
   if (!movie) return null;
   return (
     <>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <MovieImage posterPath={movie.poster_path} />
         <MovieTrailer setShowVideo={setShowVideo} />
         <MovieTitle movie={movie} />
+        <MovieRating
+          voteCount={movie.vote_count}
+          voteAverage={movie.vote_average}
+        />
+        <Text style={styles.overview}>
+          {movie.overview}
+        </Text>
+        <Text style={[styles.overview, {marginBottom: 40}]}>
+          Fecha de Publicacion: {movie.release_date}
+        </Text>
       </ScrollView>
       <ModalVideo show={showVideo} setShow={setShowVideo} idMovie={id} />
     </>
@@ -73,7 +88,28 @@ function MovieTitle(props) {
   );
 }
 
-
+function MovieRating(props) {
+  const {voteCount, voteAverage} = props;
+  const media = voteAverage / 2;
+  const {theme} = usePreferences();
+  return (
+    <View style={styles.viewRating}>
+      <Rating
+        type="custom"
+        ratingImage={theme === 'dark' ? startDark : startLight}
+        ratingColor="#ffc205"
+        ratingBackgroundColor={theme === 'dark' ? '#192734' : '#f0f0f0'}
+        startingValue={media}
+        imageSize={20}
+        style={{marginRight: 20}}
+      />
+      <Text style={{ fontSize: 16, marginRight: 5}}>{media}</Text>
+      <Text style={{fontSize: 12, color: '#8697a5'}}>
+        {voteCount} votos
+      </Text>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   viewPoster: {
@@ -113,4 +149,16 @@ const styles = StyleSheet.create({
     marginRight: 20,
     color: '#8697a5',
   },
+  viewRating: {
+    marginHorizontal: 30,
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  overview: {
+    marginHorizontal: 30,
+    marginTop: 20,
+    textAlign: 'justify',
+    color: '#8697a5'
+  }
 });
